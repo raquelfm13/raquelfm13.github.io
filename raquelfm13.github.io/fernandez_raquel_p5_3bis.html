@@ -1,0 +1,130 @@
+
+
+<html>
+  <head>
+    <meta charset="utf-8" /> 
+    <title>Raquel</title> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  </head>
+
+  <body>
+    <h1>Hola</h1>
+  
+ <script>
+ 
+function setup() {
+  createCanvas(600, 400);
+  background(135, 206, 235); // Cielo azul
+
+  // --- SUELO ---
+  noStroke();
+  fill(100, 200, 100);
+  rect(0, 300, 600, 100); // Césped
+
+  // --- SOL ---
+  fill(255, 255, 0);
+  noStroke();
+  circle(500, 80, 100); // Sol
+
+  // --- ARCOÍRIS ---
+  noFill();
+  strokeWeight(15);
+  stroke(255, 0, 0);
+  arc(300, 300, 400, 300, PI, TWO_PI);
+  stroke(255, 165, 0);
+  arc(300, 300, 370, 270, PI, TWO_PI);
+  stroke(255, 255, 0);
+  arc(300, 300, 340, 240, PI, TWO_PI);
+  stroke(0, 255, 0);
+  arc(300, 300, 310, 210, PI, TWO_PI);
+  stroke(0, 0, 255);
+  arc(300, 300, 280, 180, PI, TWO_PI);
+  stroke(148, 0, 211);
+  arc(300, 300, 250, 150, PI, TWO_PI);
+
+  // --- EDIFICIO ---
+  fill(200);
+  stroke(0);
+  strokeWeight(2);
+  rect(150, 180, 150, 120); // Cuerpo del edificio
+
+  // Techo
+  fill(150, 75, 0);
+  triangle(150, 180, 225, 120, 300, 180);
+
+  // Puerta
+  fill(139, 69, 19);
+  rect(210, 240, 30, 60);
+  fill(0);
+  circle(235, 270, 5); // Tirador
+
+  // Ventanas
+  fill(173, 216, 230);
+  rect(165, 200, 30, 25);
+  rect(255, 200, 30, 25);
+
+  stroke(255);
+  strokeWeight(2);
+  line(165, 212, 195, 212);
+  line(255, 212, 285, 212);
+
+  // --- ÁRBOL ---
+  noStroke();
+  fill(139, 69, 19);
+  rect(90, 240, 20, 60); // Tronco
+  fill(34, 139, 34);
+  ellipse(100, 220, 70, 70); // Copa del árbol
+
+  // --- NUBES ---
+  noStroke();
+  fill(255);
+  ellipse(100, 80, 60, 40);
+  ellipse(130, 70, 50, 35);
+  ellipse(160, 80, 60, 40);
+
+  // --- COCHE ---
+  // Cuerpo del coche
+  fill(255, 0, 0); // Rojo
+  stroke(0);
+  strokeWeight(2);
+  rect(360, 270, 130, 40); // Parte inferior
+  rect(380, 240, 90, 30);  // Parte superior (cabina)
+
+  // Ruedas
+  fill(0);
+  circle(385, 315, 25);
+  circle(465, 315, 25);
+
+  // Ventanas del coche
+  fill(173, 216, 230);
+  rect(390, 245, 30, 20);
+  rect(430, 245, 30, 20);
+
+  // --- PERSONAJE ---
+  // Cabeza
+  fill(255, 220, 180);
+  noStroke();
+  circle(520, 250, 30);
+
+  // Cuerpo
+  fill(0, 0, 255);
+  rect(510, 265, 20, 35);
+
+  // Piernas
+  stroke(0);
+  strokeWeight(3);
+  line(515, 300, 510, 320);
+  line(525, 300, 530, 320);
+
+  // Brazos
+  line(510, 275, 495, 290);
+  line(530, 275, 545, 290);
+
+  // Detalle: sonrisa
+  noFill();
+  stroke(0);
+  arc(520, 255, 10, 5, 0, PI);
+}
+    </script>
+  </body>
+</html>

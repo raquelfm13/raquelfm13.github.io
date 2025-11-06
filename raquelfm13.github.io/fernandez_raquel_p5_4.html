@@ -1,0 +1,60 @@
+
+
+<html>
+  <head>
+    <meta charset="utf-8" /> 
+    <title>Raquel</title> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  </head>
+
+  <body>
+    <h1>Hola</h1>
+  
+ <script>
+ 
+function setup() {
+  createCanvas(800, 500);   // Tamaño del lienzo (puedes probar cambiarlo)
+  background(240);
+  noStroke();
+
+  // --- TÍTULO ---
+  textSize(28);
+  textAlign(CENTER, TOP);
+  fill(180, 0, 0);   // Rojo oscuro
+  text("Queen - The Greatest Hits", 400, 20);
+
+  // --- SUBTÍTULO ---
+  textSize(16);
+  fill(80, 0, 120);  // Púrpura
+  text("La banda británica que revolucionó el rock", 400, 60);
+
+  // --- NOTAS EN LAS ESQUINAS ---
+  textSize(12);
+  fill(0);
+  
+  textAlign(LEFT, TOP);
+  text("(0, 0)", 6, 6);  // Esquina superior izquierda
+  
+  textAlign(RIGHT, TOP);
+  text("(800, 0)", 794, 6); // Esquina superior derecha
+  
+  textAlign(LEFT, BOTTOM);
+  text("(0, 500)", 6, 494); // Esquina inferior izquierda
+  
+  textAlign(RIGHT, BOTTOM);
+  text("(800, 500)", 794, 494); // Esquina inferior derecha
+
+  // --- TEXTO EN EL CENTRO ---
+  textAlign(CENTER, CENTER);
+  textSize(14);
+  fill(30);
+  text("Centro (400, 250)", 400, 250);
+
+  // --- FRASE EXTRA ---
+  textSize(18);
+  fill(255, 140, 0); // Naranja
+  text("We will, we will rock you!", 400, 320);
+}
+    </script>
+  </body>
+</html>
