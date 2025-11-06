@@ -1,0 +1,39 @@
+
+
+<html>
+  <head>
+    <meta charset="utf-8" /> 
+    <title>Raquel</title> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  </head>
+
+  <body>
+    <h1>Hola</h1>
+  
+ <script>
+ 
+function setup() {
+  createCanvas(400, 400);   // Crea un lienzo de 400x400 píxeles
+  background(255);          // Fondo blanco
+
+  // --- CABEZA ---
+  noFill();                 // Sin relleno
+  stroke(0);                // Color del borde: negro
+  strokeWeight(3);          // Grosor de línea
+  circle(200, 200, 200);    // Círculo principal (cabeza)
+
+  // --- OJOS ---
+  fill(0);                  // Color negro para los ojos
+  noStroke();               // Sin borde
+  circle(160, 170, 20);     // Ojo izquierdo
+  circle(240, 170, 20);     // Ojo derecho
+
+  // --- BOCA ---
+  noFill();                 // Sin relleno para el arco
+  stroke(0);                // Borde negro
+  strokeWeight(4);          // Boca un poco más gruesa
+  arc(200, 230, 100, 60, 0, PI);  // Arco de 0 a PI radianes (media sonrisa)
+}
+    </script>
+  </body>
+</html>
