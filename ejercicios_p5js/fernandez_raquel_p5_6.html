@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" /> 
+    <title>A1 — Variables (estado + movimiento simple)</title> 
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  </head>
+
+  <body>
+  <script>
+  // =====================================================
+  // A1 — Variables (estado + movimiento simple)
+  // Autor/a: Fernández, Raquel
+  // Qué hace: el coche se desplaza horizontalmente usando variables
+  // Conceptos: variables, estado, setup/draw, width/height
+  // =====================================================
+
+  // Estado del coche
+  let x, y, v, d, r;
+
+  function setup() {
+    createCanvas(600, 400);
+
+    // Tamaño relativo del coche
+    d = min(width, height) * 0.18;
+    r = d / 2;
+
+    // Posición inicial: entra por la izquierda
+    x = -r;
+    y = height * 0.80;
+
+    // Velocidad relativa al ancho
+    v = width / 500;
+  }
+
+  function draw() {
+    // --- CIELO ---
+    background(135, 206, 235);
+
+    // --- SUELO ---
+    noStroke();
+    fill(100, 200, 100);
+    rect(0, height * 0.75, width, height * 0.25);
+
+    // --- SOL ---
+    fill(255, 255, 0);
+    circle(width * 0.85, height * 0.20, width * 0.15);
+
+    // --- ARCOÍRIS ---
+    noFill();
+    strokeWeight(15);
+    stroke(255, 0, 0);  arc(300, 300, 400, 300, PI, TWO_PI);
+    stroke(255, 165, 0); arc(300, 300, 370, 270, PI, TWO_PI);
+    stroke(255, 255, 0); arc(300, 300, 340, 240, PI, TWO_PI);
+    stroke(0, 255, 0); arc(300, 300, 310, 210, PI, TWO_PI);
+    stroke(0, 0, 255); arc(300, 300, 280, 180, PI, TWO_PI);
+    stroke(148, 0, 211); arc(300, 300, 250, 150, PI, TWO_PI);
+
+    // --- CASA ---
+    fill(200);
+    stroke(0);
+    strokeWeight(2);
+    rect(150, 180, 150, 120);
+    fill(150, 75, 0);
+    triangle(150, 180, 225, 120, 300, 180);
+
+    // Puerta
+    fill(139, 69, 19);
+    rect(210, 240, 30, 60);
+
+    // Ventanas
+    fill(173, 216, 230);
+    rect(165, 200, 30, 25);
+    rect(255, 200, 30, 25);
+
+    // --- ÁRBOL ---
+    noStroke();
+    fill(139, 69, 19);
+    rect(90, 240, 20, 60);
+    fill(34, 139, 34);
+    ellipse(100, 220, 70, 70);
+
+    // --- NUBES ---
+    fill(255);
+    ellipse(100, 80, 60, 40);
+    ellipse(130, 70, 50, 35);
+    ellipse(160, 80, 60, 40);
+
+    // --- COCHE (EN MOVIMIENTO) ---
+    stroke(0);
+    fill(255, 0, 0);
+    rect(x, y - d * 0.55, d * 1.5, d * 0.45);
+    rect(x + d * 0.2, y - d * 0.88, d * 1.1, d * 0.33);
+
+    // Ruedas
+    fill(0);
+    circle(x + d * 0.25, y - d * 0.1, d * 0.25);
+    circle(x + d * 1.15, y - d * 0.1, d * 0.25);
+
+    // --- ACTUALIZACIÓN DEL ESTADO ---
+    x = x + v;
+
+    // --- RÓTULO ---
+    noStroke();
+    fill(0);
+    textSize(14);
+    textAlign(LEFT, TOP);
+    text("A1 — Variables (estado + movimiento simple)", 10, 10);
+  }
+  </script>
+  </body>
+</html>
