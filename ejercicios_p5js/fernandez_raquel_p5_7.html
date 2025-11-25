@@ -1,0 +1,279 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>T7 — Variables + Elementos Antiguos — Fernández Raquel</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+</head>
+
+<body>
+<script>
+
+// =====================================================
+// T7 — Variables + elementos antiguos colocados en el suelo
+// Autora: Fernández, Raquel
+// =====================================================
+
+
+// -----------------------------------------------------
+// SOL y su cielo
+// -----------------------------------------------------
+let x_s, y_s, v_s, d_s, r_s;
+let x_cs, adelanto_s;
+
+// -----------------------------------------------------
+// LUNA y su cielo
+// -----------------------------------------------------
+let x_l, y_l, v_l, d_l, r_l;
+let x_cl, adelanto_l;
+
+// -----------------------------------------------------
+// GLOBO
+// -----------------------------------------------------
+let xG, yG, vyG, Sg, cuerda;
+
+// -----------------------------------------------------
+// ÁRBOL que crece
+// -----------------------------------------------------
+let S, troncoW, troncoH, copaD;
+
+// -----------------------------------------------------
+// COCHE sencillo
+// -----------------------------------------------------
+let xC, vxC, L, H, wheelD;
+
+// -----------------------------------------------------
+// ELEMENTOS ANTIGUOS REESCALADOS
+// casa, árbol clásico, nubes, personaje, arcoíris
+// -----------------------------------------------------
+let SA;
+
+
+
+function setup() {
+  createCanvas(600, 600);
+
+  // ---------- SOL ----------
+  d_s = width * 0.15;
+  r_s = d_s * 0.5;
+  x_s = -r_s;
+  y_s = height * 0.35;
+  v_s = width / 800;
+
+  adelanto_s = width * 0.10;
+  x_cs = x_s + adelanto_s;
+
+  // ---------- LUNA ----------
+  d_l = height * 0.30;
+  r_l = d_l * 0.5;
+  x_l = -width - r_l;
+  y_l = height * 0.55;
+  v_l = v_s;
+
+  adelanto_l = width * 0.10;
+  x_cl = x_l + adelanto_l;
+
+  // ---------- GLOBO ----------
+  Sg = 0.08 * height;
+  cuerda = 1.2 * Sg;
+  xG = width * 0.85;
+  yG = height * 0.90;
+  vyG = height * 0.0015;
+
+  // ---------- ÁRBOL QUE CRECE ----------
+  S = 0.1 * height;
+  troncoW = 0.3 * S;
+  troncoH = 1.2 * S;
+  copaD = 1.1 * S;
+
+  // ---------- COCHE ----------
+  L  = 0.12 * height;
+  H  = 0.4 * L;
+  wheelD = 0.25 * L;
+
+  xC = width * 0.1;
+  vxC = width * 0.003;
+
+  // ---------- ESCALA ARCOÍRIS ----------
+  SA = width * 0.5;
+}
+
+
+
+function draw() {
+
+  // -----------------------------------------------------
+  // FONDO + CIELOS
+  // -----------------------------------------------------
+  background(20, 20, 30);
+  noStroke();
+
+  // CIELO DEL SOL — azul claro
+  fill(120, 180, 255);
+  rect(x_cs, 0, width, height*0.8);
+
+  // CIELO DE LA LUNA — negro (sin gris intermedio)
+  fill(0);
+  rect(x_cl, 0, width, height*0.8);
+
+  fill(20,120,40);
+  rect(0, height*0.8, width, height*0.2);
+
+
+
+  // -----------------------------------------------------
+  // SOL en movimiento
+  // -----------------------------------------------------
+  fill(255,210,0);
+  circle(x_s, y_s, d_s);
+  x_s  += v_s;
+  x_cs += v_s;
+
+
+
+  // -----------------------------------------------------
+  // LUNA en movimiento
+  // -----------------------------------------------------
+  fill(255);
+  circle(x_l, y_l, d_l);
+  x_l  += v_l;
+  x_cl += v_l;
+
+
+
+  // -----------------------------------------------------
+  // GLOBO
+  // -----------------------------------------------------
+  fill(255,80,80);
+  noStroke();
+  circle(xG, yG, Sg);
+
+  stroke(60); strokeWeight(1);
+  line(xG, yG+0.5*Sg, xG, yG+0.5*Sg + cuerda);
+
+  yG -= vyG;
+
+
+
+  // -----------------------------------------------------
+  // ÁRBOL que crece
+  // -----------------------------------------------------
+  S += 0.0008 * height;
+  troncoW = 0.3*S;
+  troncoH = 1.2*S;
+  copaD   = 1.1*S;
+
+  noStroke();
+  fill(120,80,40);
+  rect(0.15*width - 0.5*troncoW,
+       height*0.8 - troncoH,
+       troncoW, troncoH);
+
+  fill(40,140,60);
+  circle(0.15*width,
+         height*0.8 - troncoH - 0.3*S,
+         copaD);
+
+
+
+  // =====================================================
+  // ELEMENTOS ANTIGUOS 
+  // =====================================================
+
+  // -----------------------------------------------------
+  // ARCOÍRIS
+  // -----------------------------------------------------
+  noFill();
+  strokeWeight(width * 0.02);
+
+  let cx = width*0.50;
+  let cy = height*0.80;
+  let W1 = SA;
+  let H1 = SA*0.75;
+
+  stroke(255,0,0);   arc(cx,cy, W1,     H1,     PI, TWO_PI);
+  stroke(255,165,0); arc(cx,cy, W1*0.93,H1*0.90,PI,TWO_PI);
+  stroke(255,255,0); arc(cx,cy, W1*0.86,H1*0.80,PI,TWO_PI);
+  stroke(0,255,0);   arc(cx,cy, W1*0.79,H1*0.70,PI,TWO_PI);
+  stroke(0,0,255);   arc(cx,cy, W1*0.72,H1*0.60,PI,TWO_PI);
+  stroke(148,0,211); arc(cx,cy, W1*0.65,H1*0.50,PI,TWO_PI);
+
+
+
+  // -----------------------------------------------------
+  // COCHE
+  // -----------------------------------------------------
+  stroke(0); strokeWeight(1);
+  fill(255,0,0); 
+  rect(xC - 0.5*L, 0.75*height - 0.85*H, L, H, 0.1*L);
+
+  fill(40);
+  circle(xC - 0.35*L, 0.75*height + 0.55*H, wheelD);
+  circle(xC + 0.35*L, 0.75*height + 0.55*H, wheelD);
+
+  xC += vxC;
+
+
+
+  // -----------------------------------------------------
+  // CASA 
+  // -----------------------------------------------------
+  stroke(0); strokeWeight(1);
+
+  let CH = height*0.20;
+  let CW = width*0.22;
+  let houseX = width*0.25;
+  let houseY = height*0.8;
+
+  fill(200);
+  rect(houseX - CW/2, houseY - CH, CW, CH);
+
+  fill(150,75,0);
+  triangle(
+    houseX - CW/2, houseY - CH,
+    houseX,        houseY - CH*1.4,
+    houseX + CW/2, houseY - CH
+  );
+
+  fill(139,69,19);
+  rect(houseX - CW*0.10, houseY - CH*0.45, CW*0.20, CH*0.45);
+
+  fill(173,216,230);
+  rect(houseX - CW*0.35, houseY - CH*0.75, CW*0.20, CH*0.25);
+  rect(houseX + CW*0.15, houseY - CH*0.75, CW*0.20, CH*0.25);
+
+
+
+  // -----------------------------------------------------
+  // NUBES 
+  // -----------------------------------------------------
+  noStroke();
+  fill(255);
+  ellipse(width*0.15, height*0.13, width*0.10, height*0.06);
+  ellipse(width*0.20, height*0.11, width*0.09, height*0.05);
+  ellipse(width*0.25, height*0.13, width*0.10, height*0.06);
+
+
+
+  // -----------------------------------------------------
+  // PERSONAJE 
+  // -----------------------------------------------------
+  let PH = height*0.06;
+  let px = width*0.80;
+  let py = height*0.8;
+
+  fill(255,220,180);
+  circle(px, py - PH*2.3, PH);
+
+  fill(0,0,255);
+  rect(px - PH*0.35, py - PH*2.3 + PH*0.5, PH*0.7, PH*1.3);
+
+  stroke(0); strokeWeight(1);
+  line(px - PH*0.15, py - PH*0.5, px - PH*0.22, py);
+  line(px + PH*0.15, py - PH*0.5, px + PH*0.22, py);
+
+}
+
+</script>
+</body>
+</html>
