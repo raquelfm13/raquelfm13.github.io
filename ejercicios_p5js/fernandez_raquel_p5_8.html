@@ -96,11 +96,11 @@ function draw() {
   }
 
   // COLORES PLANETAS 
-  let mercurio = planeta(aMercurio, rMercurio, sMercurio, [169, 169, 169]);   // gris metálico
-  let venus    = planeta(aVenus,   rVenus,   sVenus,   [218, 180, 140]);     // beige amarillento
-  let tierra   = planeta(aTierra,  rTierra,  sTierra,  [70, 130, 180]);      // azul
-  let marte    = planeta(aMarte,   rMarte,   sMarte,   [200, 90, 60]);       // rojo
-  let jupiter  = planeta(aJupiter, rJupiter, sJupiter, [215, 180, 140]);     // tonos marrón claro
+  let mercurio = planeta(aMercurio, rMercurio, sMercurio, [169, 169, 169]);   
+  let venus    = planeta(aVenus,   rVenus,   sVenus,   [218, 180, 140]);     
+  let tierra   = planeta(aTierra,  rTierra,  sTierra,  [70, 130, 180]);      
+  let marte    = planeta(aMarte,   rMarte,   sMarte,   [200, 90, 60]);       
+  let jupiter  = planeta(aJupiter, rJupiter, sJupiter, [215, 180, 140]);     
   
   // SATURNO + ANILLOS
   let satX = centerX + cos(aSaturno) * rSaturno;
@@ -117,8 +117,8 @@ function draw() {
   fill(240, 220, 160);
   circle(satX, satY, sSaturno);
 
-  let urano    = planeta(aUrano,   rUrano,   sUrano,   [170, 220, 230]);     // cian pálido
-  let neptuno  = planeta(aNeptuno, rNeptuno, sNeptuno, [100, 120, 255]);     // azul intenso
+  let urano    = planeta(aUrano,   rUrano,   sUrano,   [170, 220, 230]);     
+  let neptuno  = planeta(aNeptuno, rNeptuno, sNeptuno, [100, 120, 255]);     
 
   // MOVIMIENTO
   aMercurio += vMercurio;
@@ -132,4 +132,5 @@ function draw() {
 }
 </script>
 </body>
+
 </html>
