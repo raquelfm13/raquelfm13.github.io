@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sistema Solar Con Luna</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+</head>
+<body>
+<script>
+
+let centerX, centerY;
+let sunSize;
+
+// RADIOS 
+let rMercurio, rVenus, rTierra, rMarte, rJupiter, rSaturno, rUrano, rNeptuno;
+
+// TAMAÑOS
+let sMercurio = 8;
+let sVenus    = 14;
+let sTierra   = 15;
+let sMarte    = 11;
+let sJupiter  = 35;
+let sSaturno  = 30;
+let sUrano    = 24;
+let sNeptuno  = 23;
+
+// VARIABLES DE LA LUNA
+let aLuna = 0;          // ángulo inicial
+let vLuna = 0.08;       // velocidad 
+let rLuna = 28;         // radio de la órbita alrededor de la Tierra
+let sLuna = 6;          // tamaño visual de la Luna
+
+function setup() {
+  createCanvas(1000, 1000);
+
+  centerX = width / 2;
+  centerY = height / 2;
+
+  // SOL
+  sunSize = 120;
+
+  // ÓRBITA DE CADA PLANETA
+  rMercurio = 90;
+  rVenus    = 140;
+  rTierra   = 190;
+  rMarte    = 240;
+  rJupiter  = 300;
+  rSaturno  = 360;
+  rUrano    = 420;
+  rNeptuno  = 480;
+
+  // ANGULOS INICIALES
+  aMercurio = 0;
+  aVenus    = 0.4;
+  aTierra   = 1.1;
+  aMarte    = 2.0;
+  aJupiter  = 0.7;
+  aSaturno  = 1.5;
+  aUrano    = 2.3;
+  aNeptuno  = 3.0;
+
+  // VELOCIDADES
+  vMercurio = 0.02;
+  vVenus    = 0.015;
+  vTierra   = 0.010;
+  vMarte    = 0.008;
+  vJupiter  = 0.003;
+  vSaturno  = 0.002;
+  vUrano    = 0.0015;
+  vNeptuno  = 0.0006;
+}
+
+function draw() {
+  background(0); 
+
+  noFill();
+  stroke(255);
+  strokeWeight(1);
+
+  // ÓRBITAS
+  circle(centerX, centerY, rMercurio*2);
+  circle(centerX, centerY, rVenus*2);
+  circle(centerX, centerY, rTierra*2);
+  circle(centerX, centerY, rMarte*2);
+  circle(centerX, centerY, rJupiter*2);
+  circle(centerX, centerY, rSaturno*2);
+  circle(centerX, centerY, rUrano*2);
+  circle(centerX, centerY, rNeptuno*2);
+
+  // SOL
+  noStroke();
+  fill(255, 200, 60);
+  circle(centerX, centerY, sunSize);
+
+  // Función para planetas
+  function planeta(ang, rad, tam, col) {
+    let x = centerX + cos(ang) * rad;
+    let y = centerY + sin(ang) * rad;
+    fill(col);
+    circle(x, y, tam);
+
+    return {x, y};
+  }
+
+  // PLANETAS
+  let mercurio = planeta(aMercurio, rMercurio, sMercurio, [169, 169, 169]);
+  let venus    = planeta(aVenus,   rVenus,   sVenus,   [218, 180, 140]);
+  let tierra   = planeta(aTierra,  rTierra,  sTierra,  [70, 130, 180]); 
+  let marte    = planeta(aMarte,   rMarte,   sMarte,   [200, 90, 60]);
+  let jupiter  = planeta(aJupiter, rJupiter, sJupiter, [215, 180, 140]);
+
+  // LUNA 
+  let moonX = tierra.x + cos(aLuna) * rLuna;
+  let moonY = tierra.y + sin(aLuna) * rLuna;
+
+  noStroke();
+  fill(230);
+  circle(moonX, moonY, sLuna);
+
+  // SATURNO
+  let satX = centerX + cos(aSaturno) * rSaturno;
+  let satY = centerY + sin(aSaturno) * rSaturno;
+
+  // ANILLOS
+  noFill();
+  stroke(210, 200, 160);
+  strokeWeight(4);
+  ellipse(satX, satY, sSaturno*2.4, sSaturno*1.1);
+
+  // CUERPO DE SATURNO
+  noStroke();
+  fill(240, 220, 160);
+  circle(satX, satY, sSaturno);
+
+  let urano   = planeta(aUrano,   rUrano,   sUrano,   [170, 220, 230]);
+  let neptuno = planeta(aNeptuno, rNeptuno, sNeptuno, [100, 120, 255]);
+
+  // MOVIMIENTO
+  aMercurio += vMercurio;
+  aVenus    += vVenus;
+  aTierra   += vTierra;
+  aMarte    += vMarte;
+  aJupiter  += vJupiter;
+  aSaturno  += vSaturno;
+  aUrano    += vUrano;
+  aNeptuno  += vNeptuno;
+
+  // ÁNGULO DE LA LUNA
+  aLuna += vLuna;
+}
+</script>
+</body>
+</html>
