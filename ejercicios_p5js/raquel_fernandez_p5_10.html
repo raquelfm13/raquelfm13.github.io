@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>If básicos (día/noche)</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+</head>
+<body>
+
+<script>
+
+// Estado global
+let xS, yS, dS, rS, vS;
+
+function setup() {
+  createCanvas(900, 500);
+
+  dS = 0.18 * width;   // diámetro del Sol
+  rS = dS / 2;         // radio
+  yS = 0.35 * height;  // altura del Sol
+  xS = -rS;            // entra desde la izquierda
+  vS = width / 400;    // velocidad
+}
+
+function draw() {
+
+  // Fondo 
+  // Día
+  if (xS <= width + rS) {
+    background(135, 206, 235); // día
+  } else {
+    background(0);             // noche
+  }
+
+  // Suelo
+  noStroke();
+  fill(20, 120, 40);
+  rect(0, 0.8 * height, width, 0.2 * height);
+
+  // Sol
+  noStroke();
+  fill(255, 210, 0);
+  circle(xS, yS, dS);
+
+  // Movimiento constante
+  xS = xS + vS;
+
+  // Reinicio por posición
+  if (xS >= 2 * width - rS) {
+    xS = -rS;
+  }
+}
+</script>
+
+</body>
+</html>
