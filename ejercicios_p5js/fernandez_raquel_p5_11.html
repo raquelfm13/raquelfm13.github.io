@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>T11 — Sol y Luna sincronizados</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+</head>
+<body>
+
+<script>
+
+
+// Estado global
+
+// Sol
+let xS, yS, dS, rS, vS;
+
+// Luna
+let xL, yL, dL, rL, vL;
+
+function setup() {
+  createCanvas(900, 500);
+
+
+  // Sol
+
+  dS = min(width, height) * 0.20;
+  rS = dS / 2;
+  xS = -rS;
+  yS = height * 0.35;
+  vS = width / 400;
+
+  // Luna
+
+  dL = dS * 0.5;
+  rL = dL / 2;
+  xL = -width - rL;
+  yL = height / 3;
+  vL = vS;
+}
+
+function draw() {
+
+  // Fondo
+
+  if (xS <= width + rS) {
+    background(135, 206, 235); // día
+  } else {
+    background(0);             // noche
+  }
+
+  // Suelo
+
+  noStroke();
+  fill(20, 120, 40);
+  rect(0, 0.8 * height, width, 0.2 * height);
+
+  // Sol
+
+  noStroke();
+  fill(255, 210, 0);
+  circle(xS, yS, dS);
+
+  // Luna
+
+  noStroke();
+  fill(200);
+  circle(xL, yL, dL);
+
+  // Movimiento sincronizado
+
+  xS = xS + vS;
+  xL = xL + vL;
+
+  // Reinicio por posición
+
+  if (xS > 2 * width + rS) {
+    xS = -rS;
+    xL = -width - rL;
+  }
+
+  // Depuración
+ 
+  textSize(14);
+  stroke(255, 0, 0);
+  fill(255);
+  text(xS, 10, 10);
+  text(xL, 10, 28);
+}
+
+</script>
+
+</body>
+</html>
