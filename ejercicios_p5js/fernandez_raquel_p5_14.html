@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Tarea 14 - Funciones mínimas</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+</head>
+
+<body>
+<script>
+
+  // VARIABLES 
+  let x;
+  let rS = 40;
+  let rL = 30;
+  let vel = 2;
+  let fase = 0;   // 0 = día | 1 = noche
+
+  // VARIABLES CALENDARIO
+  let dia, mes, anio;
+
+  // VARIABLES STICKMAN 
+  let xP, yP;
+  let S;
+  let vP;
+  let groundY;
+  let vY;
+  let jumpV;
+  let g;
+
+  function setup() {
+    createCanvas(600, 400);
+
+    // Sol y Luna
+    x = -rS;
+
+    // Calendario
+    dia = 1;
+    mes = 1;
+    anio = 2025;
+
+    // Stickman
+    groundY = 0.80 * height;
+
+    S  = 0.12 * min(width, height);
+    xP = 0.25 * width;
+    yP = groundY;
+
+    vP = width / 150;
+
+    vY = 0;
+    jumpV = -0.030 * height;
+    g = 0.0016 * height;
+  }
+
+  function draw() {
+
+    // FONDO
+    if (fase === 0) {
+      background(135, 206, 235);
+    } else {
+      background(10, 10, 50);
+    }
+
+    noStroke();
+
+    // SOL
+    if (fase === 0) {
+      fill(255, 204, 0);
+      ellipse(x, height / 2, rS * 2);
+    }
+
+    // LUNA
+    if (fase === 1) {
+      fill(220);
+      ellipse(x, height / 2, rL * 2);
+    }
+
+    // Movimiento sol / luna
+    x += vel;
+
+    // Cambio de fase
+    if (x > width + rS) {
+      x = -rS;
+      fase++;
+
+      if (fase > 1) {
+        fase = 0;
+        actualizarCalendario();
+      }
+    }
+
+    // SUELO
+    fill(60, 180, 75);
+    rect(0, groundY, width, height - groundY);
+
+    // TEXTO CALENDARIO
+    fill(fase === 0 ? 0 : 255);
+    textSize(20);
+    text("Fecha: (" + dia + ") (" + mes + ") (" + anio + ")", 10, 30);
+
+    // MOVIMIENTO HORIZONTAL
+    if (keyIsDown(LEFT_ARROW)) {
+      xP -= vP;
+    } else if (keyIsDown(RIGHT_ARROW)) {
+      xP += vP;
+    }
+
+    // Límites
+    if (xP < 0) xP = 0;
+    if (xP > width) xP = width;
+
+    // FÍSICA SALTO
+    vY += g;
+    yP += vY;
+
+    if (yP > groundY) {
+      yP = groundY;
+      vY = 0;
+    }
+
+    // DIBUJO DEL PERSONAJE
+    dibujarStickman();
+  }
+
+
+  // FUNCIÓN: DIBUJAR STICKMAN
+ 
+  function dibujarStickman() {
+
+    let rHead = 0.20 * S;
+    let bodyL = 0.60 * S;
+    let armL  = 0.45 * S;
+    let legL  = 0.55 * S;
+
+    let hipY = yP - legL;
+    let shoulderY = hipY - bodyL;
+    let headY = shoulderY - rHead;
+
+    stroke(200, 0, 0);
+    strokeWeight(0.06 * S);
+    noFill();
+
+    // Cabeza
+    circle(xP, headY, 2 * rHead);
+
+    // Tronco
+    line(xP, shoulderY, xP, hipY);
+
+    // Brazos
+    line(xP - 0.25*S, shoulderY, xP + 0.25*S, shoulderY);
+    line(xP - 0.25*S, shoulderY, xP - 0.25*S, shoulderY + armL);
+    line(xP + 0.25*S, shoulderY, xP + 0.25*S, shoulderY + armL);
+
+    // Piernas
+    line(xP, hipY, xP - 0.18*S, yP);
+    line(xP, hipY, xP + 0.18*S, yP);
+  }
+
+  // FUNCIÓN: CALENDARIO
+
+  function actualizarCalendario() {
+    dia++;
+
+    if (dia > 30) {
+      dia = 1;
+      mes++;
+    }
+
+    if (mes > 12) {
+      mes = 1;
+      anio++;
+    }
+  }
+
+  // EVENTO TECLADO
+  function keyPressed() {
+    if (keyCode === UP_ARROW && yP === groundY) {
+      vY = jumpV;
+    }
+  }
+
+</script>
+</body>
+</html>
