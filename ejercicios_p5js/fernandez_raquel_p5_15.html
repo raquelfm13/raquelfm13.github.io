@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title> Disparo y objetivo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+</head>
+
+<body>
+<script>
+
+  // ======================
+  // VARIABLES GENERALES
+  // ======================
+  let x;
+  let rS = 40;
+  let rL = 30;
+  let vel = 2;
+  let fase = 0; // 0 = día | 1 = noche
+
+
+  // VARIABLES CALENDARIO
+
+  let dia, mes, anio;
+
+
+  // VARIABLES STICKMAN
+
+  let xP, yP;
+  let S;
+  let vP;
+  let groundY;
+  let vY;
+  let jumpV;
+  let g;
+
+
+  // VARIABLES DISPARO
+
+  let xD, yD;
+  let tD;
+  let vD;
+  let disparoActivo;
+
+  // VARIABLES OBJETIVO
+
+  let xO, yO;
+  let wO, hO;
+  let vO;
+
+  function setup() {
+    createCanvas(600, 400);
+
+    // Sol y luna
+    x = -rS;
+
+    // Calendario
+    dia = 1;
+    mes = 1;
+    anio = 2025;
+
+    // Stickman
+    groundY = 0.80 * height;
+    S  = 0.12 * min(width, height);
+    xP = 0.25 * width;
+    yP = groundY;
+    vP = width / 150;
+    vY = 0;
+    jumpV = -0.030 * height;
+    g = 0.0016 * height;
+
+    // Disparo
+    tD = 0.03 * min(width, height);
+    vD = 0.04 * height;
+    disparoActivo = false;
+
+    // Objetivo
+    wO = 0.10 * width;
+    hO = 0.05 * height;
+    yO = random(0.20 * height, 0.35 * height);
+    xO = -wO;
+    vO = random(1.5, 3);
+  }
+
+  function draw() {
+
+    // 1) CIELO DÍA / NOCHE
+    if (fase === 0) {
+      background(135, 206, 235);
+    } else {
+      background(10, 10, 50);
+    }
+
+    // 2) SUELO
+    noStroke();
+    fill(60, 180, 75);
+    rect(0, groundY, width, height - groundY);
+
+    // 3) SOL / LUNA
+    if (fase === 0) dibujarSol();
+    else dibujarLuna();
+
+    // 4) MOVIMIENTO SOL / LUNA + CALENDARIO
+    x += vel;
+    if (x > width + rS) {
+      x = -rS;
+      fase++;
+      if (fase > 1) {
+        fase = 0;
+        actualizarCalendario();
+      }
+    }
+
+    // 5) OBJETIVO
+    xO += vO;
+    if (xO > width + wO || xO < -wO) {
+      if (random(1) < 0.5) {
+        xO = -wO;
+        vO = random(1.5, 3);
+      } else {
+        xO = width + wO;
+        vO = -random(1.5, 3);
+      }
+    }
+    dibujarObjetivo();
+
+    // 6) DISPARO
+    if (disparoActivo) {
+      yD -= vD;
+      if (yD < 0) {
+        disparoActivo = false;
+      }
+      dibujarDisparo();
+    }
+
+    // 7) STICKMAN (lógica + dibujo)
+    if (keyIsDown(LEFT_ARROW)) xP -= vP;
+    else if (keyIsDown(RIGHT_ARROW)) xP += vP;
+
+    if (xP < 0) xP = 0;
+    if (xP > width) xP = width;
+
+    vY += g;
+    yP += vY;
+    if (yP > groundY) {
+      yP = groundY;
+      vY = 0;
+    }
+
+    dibujarStickman();
+
+    // 8) CALENDARIO
+    dibujarCalendario();
+  }
+
+ 
+  // FUNCIONES DE DIBUJO
+
+
+  function dibujarSol() {
+    noStroke();
+    fill(255, 204, 0);
+    ellipse(x, height / 2, rS * 2);
+  }
+
+  function dibujarLuna() {
+    noStroke();
+    fill(220);
+    ellipse(x, height / 2, rL * 2);
+  }
+
+  function dibujarObjetivo() {
+    fill(200, 50, 50);
+    rect(xO, yO, wO, hO);
+  }
+
+  function dibujarDisparo() {
+    fill(255);
+    ellipse(xD, yD, tD);
+  }
+
+  function dibujarCalendario() {
+    fill(fase === 0 ? 0 : 255);
+    textSize(20);
+    text("Fecha: (" + dia + ") (" + mes + ") (" + anio + ")", 10, 30);
+  }
+
+  function dibujarStickman() {
+    let rHead = 0.20 * S;
+    let bodyL = 0.60 * S;
+    let armL  = 0.45 * S;
+    let legL  = 0.55 * S;
+
+    let hipY = yP - legL;
+    let shoulderY = hipY - bodyL;
+    let headY = shoulderY - rHead;
+
+    stroke(200, 0, 0);
+    strokeWeight(0.06 * S);
+    noFill();
+
+    circle(xP, headY, 2 * rHead);
+    line(xP, shoulderY, xP, hipY);
+    line(xP - 0.25*S, shoulderY, xP + 0.25*S, shoulderY);
+    line(xP - 0.25*S, shoulderY, xP - 0.25*S, shoulderY + armL);
+    line(xP + 0.25*S, shoulderY, xP + 0.25*S, shoulderY + armL);
+    line(xP, hipY, xP - 0.18*S, yP);
+    line(xP, hipY, xP + 0.18*S, yP);
+  }
+
+  // ======================
+  // LÓGICA
+  // ======================
+
+  function actualizarCalendario() {
+    dia++;
+    if (dia > 30) {
+      dia = 1;
+      mes++;
+    }
+    if (mes > 12) {
+      mes = 1;
+      anio++;
+    }
+  }
+
+  function keyPressed() {
+    if (keyCode === UP_ARROW && yP === groundY) {
+      vY = jumpV;
+    }
+
+    if (key === ' ' && !disparoActivo) {
+      xD = xP;
+      yD = yP - S;
+      disparoActivo = true;
+    }
+  }
+
+</script>
+</body>
+</html>
