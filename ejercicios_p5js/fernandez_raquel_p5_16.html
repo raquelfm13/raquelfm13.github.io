@@ -83,20 +83,20 @@
 
   function draw() {
 
-    // 1) CIELO DÍA / NOCHE
+    // CIELO DÍA / NOCHE
     if (fase === 0) background(135, 206, 235);
     else background(10, 10, 50);
 
-    // 2) SUELO
+    // SUELO
     noStroke();
     fill(60, 180, 75);
     rect(0, groundY, width, height - groundY);
 
-    // 3) SOL / LUNA
+    // SOL / LUNA
     if (fase === 0) dibujarSol();
     else dibujarLuna();
 
-    // 4) MOVIMIENTO SOL / LUNA + CALENDARIO
+    // MOVIMIENTO SOL / LUNA + CALENDARIO
     x += vel;
     if (x > width + rS) {
       x = -rS;
@@ -107,7 +107,7 @@
       }
     }
 
-    // 5) MOVER OBJETIVO
+    // MOVER OBJETIVO
     xO += vO;
     if (xO > width + wO || xO < -wO) {
       if (random(1) < 0.5) {
@@ -119,13 +119,13 @@
       }
     }
 
-    // 6) MOVER DISPARO
+    // MOVER DISPARO
     if (disparoActivo) {
       yD -= vD;
       if (yD < 0) disparoActivo = false;
     }
 
-    // 7) COMPROBAR IMPACTO
+    // IMPACTO
     if (disparoActivo) {
       if (
         xD >= xO &&
@@ -146,13 +146,13 @@
       }
     }
 
-    // 8) DIBUJAR OBJETIVO
+    // DIBUJAR OBJETIVO
     dibujarObjetivo();
 
-    // 9) DIBUJAR DISPARO
+    // DIBUJAR DISPARO
     if (disparoActivo) dibujarDisparo();
 
-    // 10) LÓGICA STICKMAN
+    // LÓGICA STICKMAN
     if (keyIsDown(LEFT_ARROW)) xP -= vP;
     else if (keyIsDown(RIGHT_ARROW)) xP += vP;
 
@@ -166,10 +166,10 @@
       vY = 0;
     }
 
-    // 11) DIBUJAR STICKMAN
+    // DIBUJAR STICKMAN
     dibujarStickman();
 
-    // 12) HUD
+    // HUD
     dibujarCalendario();
     dibujarPuntos();
   }
@@ -238,7 +238,6 @@
 
   // LÓGICA
  
-
   function actualizarCalendario() {
     dia++;
     if (dia > 30) {
@@ -266,3 +265,4 @@
 </script>
 </body>
 </html>
+
