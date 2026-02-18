@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ML5 — Cámara y detección (01)</title>
+
+  <!-- ml5.js (versión fija para evitar cambios de API) -->
+  <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
+
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 16px; }
+    #wrap { position: relative; width: min(720px, 100%); }
+    video, canvas { width: 100%; height: auto; border-radius: 10px; }
+    canvas { position: absolute; left: 0; top: 0; }
+    button { padding: 10px 12px; font-size: 14px; cursor: pointer; }
+    .row { display:flex; gap:12px; flex-wrap: wrap; align-items:center; margin-bottom: 10px; }
+    .badge { display:inline-block; border:1px solid #ccc; border-radius:999px; padding: 3px 10px; }
+  </style>
+</head>
+
+<body>
+  <h1>ML5 01 · Cámara en móvil + detección</h1>
+
+  <div class="row">
+    <button id="btnStart">Iniciar cámara</button>
+    <span id="status" class="badge">Estado: esperando…</span>
+    <span id="best" class="badge">Mejor detección: —</span>
+  </div>
+
+  <div id="wrap">
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="overlay"></canvas>
+  </div>
+
+  <div>
+   <h3> Explicación de cómo funciona el código</h3>
+
+   <p>
+   Este archivo HTML crea una página web que permite usar la cámara del móvil y aplicar un modelo de inteligencia artificial para detectar objetos en tiempo real. En la parte superior del documento se define la estructura básica de una página web y se incluye la librería ml5.js en una versión concreta (0.12.2) para asegurar que las funciones utilizadas funcionen correctamente. También se añaden estilos CSS que organizan la página, colocan el vídeo y el canvas uno encima del otro y dan formato a los botones y textos de estado.
+   </p>
+
+   <p>
+   En el cuerpo de la página se colocan los elementos principales de la interfaz: un botón para iniciar la cámara, un indicador de estado y un texto que muestra la mejor detección realizada por la inteligencia artificial. Debajo se encuentra el vídeo que mostrará la cámara del móvil y un canvas transparente situado encima, que se utiliza para dibujar las cajas y etiquetas de los objetos detectados. Esta superposición permite ver simultáneamente la imagen real y la información generada por el modelo de detección.
+   </p>
+
+   <p>
+   En la parte de JavaScript se obtienen referencias a todos los elementos HTML necesarios y se definen variables de control como el detector y el estado de ejecución. La función <strong>initCamera()</strong> solicita permiso al navegador para usar la cámara del dispositivo mediante <em>getUserMedia</em>. Cuando el vídeo está listo, el canvas se ajusta exactamente al tamaño real de la imagen capturada, lo que permite que las cajas dibujadas coincidan con los objetos detectados.
+   </p>
+
+   <p>
+   La función <strong>draw()</strong> se encarga de limpiar el canvas y dibujar rectángulos y textos sobre cada objeto detectado, mostrando su nombre (label) y el porcentaje de confianza (confidence). La función <strong>pickBest()</strong> analiza todas las detecciones y selecciona la que tenga mayor confianza, para mostrarla de forma resumida en la interfaz. Esto permite identificar rápidamente cuál es el objeto que el modelo reconoce con mayor seguridad.
+   </p>
+
+   <p>
+   El proceso continuo de detección se realiza en la función <strong>loopDetect()</strong>, que llama al método <em>detect</em> del modelo de ml5 usando la imagen del vídeo. Si ocurre un error, se muestra en el estado y se detiene la ejecución. Si todo funciona correctamente, se dibujan las detecciones, se actualiza la mejor detección y se vuelve a ejecutar el bucle mediante <em>requestAnimationFrame</em>, creando así una detección en tiempo real.
+   </p>
+
+   <p>
+   Finalmente, al pulsar el botón “Iniciar cámara”, se ejecuta una secuencia controlada: primero se activa la cámara (necesario que sea mediante una acción del usuario por motivos de seguridad del navegador y uso de HTTPS), después se carga el modelo de detección COCO-SSD de ml5 y, cuando todo está preparado, comienza el bucle de detección. De esta forma se consigue una aplicación web funcional que utiliza inteligencia artificial directamente en el navegador sin necesidad de instalar programas adicionales.
+   </p>
+
+  </div>
+
+
+  <script>
+    const btnStart = document.getElementById("btnStart");
+    const statusEl = document.getElementById("status");
+    const bestEl = document.getElementById("best");
+
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("overlay");
+    const ctx = canvas.getContext("2d");
+
+    let detector = null;
+    let running = false;
+
+    function setStatus(t) { statusEl.textContent = "Estado: " + t; }
+
+    async function initCamera() {
+      // En móvil, "environment" intenta usar la cámara trasera
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: "environment" } },
+        audio: false
+      });
+
+      video.srcObject = stream;
+
+      await new Promise(res => video.onloadedmetadata = () => res());
+
+      // Ajustar canvas al tamaño real del vídeo
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+    }
+
+    function draw(detections) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.lineWidth = 3;
+      ctx.font = "16px system-ui, Arial";
+
+      for (const d of detections) {
+        ctx.strokeRect(d.x, d.y, d.width, d.height);
+        const label = `${d.label} (${Math.round(d.confidence * 100)}%)`;
+        ctx.fillText(label, d.x + 6, Math.max(16, d.y + 16));
+      }
+    }
+
+    function pickBest(detections) {
+      if (!detections || detections.length === 0) return null;
+      let best = detections[0];
+      for (const d of detections) {
+        if (d.confidence > best.confidence) best = d;
+      }
+      return best;
+    }
+
+    function loopDetect() {
+      if (!running || !detector) return;
+
+      detector.detect(video, (err, results) => {
+        if (err) {
+          console.error(err);
+          setStatus("error en detección (ver consola)");
+          running = false;
+          return;
+        }
+
+        draw(results);
+
+        const best = pickBest(results);
+        bestEl.textContent = best
+          ? `Mejor detección: ${best.label} (${Math.round(best.confidence * 100)}%)`
+          : "Mejor detección: —";
+
+        requestAnimationFrame(loopDetect);
+      });
+    }
+
+    btnStart.addEventListener("click", async () => {
+      try {
+        btnStart.disabled = true;
+
+        setStatus("iniciando cámara…");
+        await initCamera();
+
+        setStatus("cargando modelo COCO-SSD…");
+        detector = await ml5.objectDetector("cocossd");
+
+        setStatus("detectando…");
+        running = true;
+        loopDetect();
+
+      } catch (e) {
+        console.error(e);
+        setStatus(`error: ${e.name} — ${e.message}`);
+        btnStart.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
