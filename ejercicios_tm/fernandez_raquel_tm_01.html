@@ -45,9 +45,20 @@
      A continuación detallo los errores detectados en el proceso
     </p>
     <ol>
-      <li>Fallo 1: …</li>
-      <li>Fallo 2: …</li>
-      <li>Fallo 3: …</li>
+      <li>Fallo 1: Confusión con objeto parcialmente visible
+Qué ocurrió: El modelo predijo neutral cuando en realidad estaba mostrando el objeto.
+Cuándo: Cuando el objeto aparecía solo parcialmente en cámara (tapado o fuera del encuadre).
+Por qué creo que pasó: Durante el entrenamiento, la mayoría de los ejemplos del objeto estaban completamente visibles. El modelo no aprendió bien a reconocer el objeto en situaciones incompletas o con oclusión.</li>
+
+      <li>Fallo 2:Fallo: Predicción incorrecta cuando no hay nada en pantalla
+Qué ocurrió: El modelo predijo objeto cuando en realidad no había ningún objeto en la imagen (solo la pared).
+Cuándo: Cuando la cámara apuntaba a un fondo vacío o a la pared sin que apareciera ni la persona ni el objeto.
+Por qué creo que pasó: El modelo no fue entrenado con suficientes ejemplos de fondos vacíos o diferentes escenarios sin la persona.</li>
+      
+      <li>Fallo 3: Falso positivo con objetos similares
+Qué ocurrió: El modelo predijo objeto cuando en realidad no estaba mostrando el objeto, sino algo parecido.
+Cuándo: Cuando aparecía un objeto similar en forma o color al elegido.
+Por qué creo que pasó: El modelo se basa en patrones visuales (colores y formas), no en el significado real. Al no tener ejemplos negativos con objetos parecidos, confunde fácilmente elementos similares.</li>
     </ol>
   </div>
 
